@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-// import { authClient } from '@/lib/auth-client';
+import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
