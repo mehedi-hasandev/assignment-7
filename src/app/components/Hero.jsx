@@ -37,7 +37,7 @@ export default function Hero() {
               </Link>
             </div>
           </div>
-
+          {/* right part */}
           <div className="flex-1 flex justify-center md:justify-end w-full shrink-0">
             <Image 
               src="/bazar-hero.png" 
