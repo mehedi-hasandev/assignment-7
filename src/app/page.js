@@ -1,69 +1,65 @@
-import Image from "next/image";
+'use cache';
 
-export default function Home() {
+import Hero from '@/app/components/Hero';
+import ProductCard from '@/app/components/ProductCard';
+import { fetchAPI, engToBnNum } from '@/lib/utils';
+
+export default async function Home() {
+  const products = (await fetchAPI('/products')) || [];
+
+  const risers = products.filter(p => p.change?.dir === 'up').slice(0, 6);
+  const fallers = products.filter(p => p.change?.dir === 'down').slice(0, 6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div>
+      <Hero />
+
+      <section className="max-w-6xl mx-auto p-4 space-y-12 my-8">
+        {risers.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <span className="text-red-600">▲</span> আজ দাম বেড়েছে
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {risers.map(p => (
+                <ProductCard key={p.slug || p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {fallers.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <span className="text-green-600">▼</span> আজ দাম কমেছে
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {fallers.map(p => (
+                <ProductCard key={p.slug || p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div id="সব-পণ্য">
+          <h2 className="text-2xl font-bold mb-1">সব পণ্য</h2>
+          <p className="text-gray-500 text-sm mb-6">
+            মোট {engToBnNum(products.length)}টি পণ্য দেখানো হচ্ছে
           </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {products.length > 0 ? (
+              products.map(p => (
+                <ProductCard key={p.slug || p.id} product={p} />
+              ))
+            ) : (
+              <p className="text-gray-500 text-center col-span-full py-10">
+                কোনো পণ্য পাওয়া যায়নি
+              </p>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }

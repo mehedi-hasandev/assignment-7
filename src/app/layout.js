@@ -1,9 +1,9 @@
 import './globals.css';
+import { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import Ticker from '@/app/components/Ticker';
-import { Suspense } from 'react';
-import { Toaster } from 'react-hot-toast';
 
 export const metadata = { 
   title: 'বাজার দর | BazarDor', 
@@ -15,9 +15,12 @@ export default function RootLayout({ children }) {
     <html lang="bn" data-theme="light">
       <body className="min-h-screen flex flex-col bg-white text-gray-800">
         <Toaster position="top-right" />
-        <Navbar />
+
+        <Suspense fallback={<div className="h-16 w-full border-b border-gray-100 bg-white" />}>
+          <Navbar />
+        </Suspense>
         
-        <Suspense fallback={<div className="h-10 bg-slate-50 border-b border-gray-200"></div>}>
+        <Suspense fallback={<div className="h-10 bg-slate-50 border-b border-gray-200" />}>
           <Ticker />
         </Suspense>
         

@@ -1,8 +1,13 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.abcz.workers.dev/api/bazardor';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://openapi.programming-hero.com/api/bazardor';
 
 export const fetchAPI = async (endpoint) => {
   try {
-    const res = await fetch(`${BASE_URL}${endpoint}`, { cache: 'no-store' });
+
+    const res = await fetch(`${BASE_URL}${endpoint}`);
+    if (!res.ok) {
+  console.error("API Error Status:", res.status);
+  return [];
+}
     const json = await res.json();
     
     

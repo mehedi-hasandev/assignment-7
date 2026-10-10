@@ -1,15 +1,19 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-html { 
-  scroll-behavior: smooth; 
+html {
+  scroll-behavior: smooth;
 }
 
 @keyframes custom-marquee {
   0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  100% { transform:translateX(-50%); }
 }
 
 .animate-marquee-rtl {
   animation: custom-marquee 120s linear infinite;
+}
+
+.group:hover .animate-marquee-rtl {
+  animation-play-state: paused;
 }

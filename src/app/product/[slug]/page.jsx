@@ -1,13 +1,50 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { fetchAPI, engToBnNum } from '@/lib/utils';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 
-export default function ProductDetailsPage() {
+function ProductDetailsSkeleton() {
+  return (
+    <div className="min-h-screen bg-[#F4F5F4] py-6">
+      <div className="max-w-6xl mx-auto px-4 space-y-6">
+        <div className="skeleton h-4 w-48"></div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="skeleton w-20 h-20 rounded-2xl shrink-0"></div>
+            <div className="space-y-3">
+              <div className="skeleton h-6 w-40"></div>
+              <div className="skeleton h-4 w-32"></div>
+              <div className="skeleton h-4 w-48"></div>
+            </div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 min-w-[140px] flex flex-col items-center justify-center border border-gray-100 space-y-2">
+            <div className="skeleton h-3 w-16"></div>
+            <div className="skeleton h-8 w-20"></div>
+            <div className="skeleton h-3 w-16"></div>
+          </div>
+        </div>
+        <div>
+          <div className="skeleton h-6 w-32 mb-4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="skeleton h-24 w-full rounded-xl"></div>
+            <div className="skeleton h-24 w-full rounded-xl"></div>
+            <div className="skeleton h-24 w-full rounded-xl"></div>
+          </div>
+        </div>
+        <div>
+          <div className="skeleton h-6 w-40 mb-4"></div>
+          <div className="skeleton h-64 w-full rounded-xl"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProductDetailsContent() {
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug;
@@ -43,40 +80,7 @@ export default function ProductDetailsPage() {
   }, [slug, session]);
 
   if (isPending || !session || isLoading) {
-    return (
-      <div className="min-h-screen bg-[#F4F5F4] py-6">
-        <div className="max-w-6xl mx-auto px-4 space-y-6">
-          <div className="skeleton h-4 w-48"></div>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-center gap-5">
-              <div className="skeleton w-20 h-20 rounded-2xl shrink-0"></div>
-              <div className="space-y-3">
-                <div className="skeleton h-6 w-40"></div>
-                <div className="skeleton h-4 w-32"></div>
-                <div className="skeleton h-4 w-48"></div>
-              </div>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-4 min-w-[140px] flex flex-col items-center justify-center border border-gray-100 space-y-2">
-              <div className="skeleton h-3 w-16"></div>
-              <div className="skeleton h-8 w-20"></div>
-              <div className="skeleton h-3 w-16"></div>
-            </div>
-          </div>
-          <div>
-            <div className="skeleton h-6 w-32 mb-4"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="skeleton h-24 w-full rounded-xl"></div>
-              <div className="skeleton h-24 w-full rounded-xl"></div>
-              <div className="skeleton h-24 w-full rounded-xl"></div>
-            </div>
-          </div>
-          <div>
-            <div className="skeleton h-6 w-40 mb-4"></div>
-            <div className="skeleton h-64 w-full rounded-xl"></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <ProductDetailsSkeleton />;
   }
 
   if (!product) {
@@ -137,12 +141,14 @@ export default function ProductDetailsPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900 mb-1">{product.nameBn || product.name}</h1>
-              <p className="text-sm text-gray-500 mb-2">প্রতি {unit} - {categoryName}</p>
+              <p className="text-sm text-gray-500 mb-2">প্রতি {unit} • {categoryName}</p>
               
               <p className="text-sm font-medium text-gray-700">
-                গতকালের তুলনায় আজ দাম <span className={isUp ? 'text-red-600' : isDown ? 'text-[#0F8A43]' : 'text-gray-600'}>
+                গতকালকের তুলনায় আজ দাম{' '}
+                <span className={isUp ? 'text-red-600' : isDown ? 'text-[#0F8A43]' : 'text-gray-600'}>
                   {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'}
-                </span> - {engToBnNum(diffAmount)} টাকা
+                </span>{' '}
+                {engToBnNum(diffAmount)} টাকা
               </p>
             </div>
           </div>
@@ -236,5 +242,13 @@ export default function ProductDetailsPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function ProductDetailsPage() {
+  return (
+    <Suspense fallback={<ProductDetailsSkeleton />}>
+      <ProductDetailsContent />
+    </Suspense>
   );
 }
