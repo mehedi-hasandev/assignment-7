@@ -6,6 +6,9 @@
 
 বাজার দর is a modern Bangladeshi commodity price tracking web application designed to help users stay informed about daily market trends and make smarter purchasing decisions. It provides a clean, data-driven experience for tracking essential groceries, comparing prices, and monitoring market movement across categories.
 
+## Live Link
+https://assignment-7-coral.vercel.app/
+
 ---
 
 ## 🚀 Technologies Used
@@ -70,6 +73,11 @@ yarn dev
 pnpm dev
 ```
 
+### 4. Open in Browser
+
+Open http://localhost:3000 to explore the app locally.
+
+---
 
 ## 📌 Summary
 
