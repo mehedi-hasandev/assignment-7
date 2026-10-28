@@ -70,11 +70,6 @@ yarn dev
 pnpm dev
 ```
 
-### 4. Open in Browser
-
-Open http://localhost:3000 to explore the app locally.
-
----
 
 ## 📌 Summary
 
