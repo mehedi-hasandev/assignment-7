@@ -2,6 +2,8 @@
 
 ## ✨ Project Overview
 
+![Project Screenshot](./public/screencapture-assignment-7-coral-vercel-app-2026-10-18-22_45_11.png)
+
 বাজার দর is a modern Bangladeshi commodity price tracking web application designed to help users stay informed about daily market trends and make smarter purchasing decisions. It provides a clean, data-driven experience for tracking essential groceries, comparing prices, and monitoring market movement across categories.
 
 ---
